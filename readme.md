@@ -1,233 +1,81 @@
-# 🚀 Nmap Automator with AI
+# PentestAI: nmapAutomator with AI-Powered Analysis
 
-<div align="center">
+This script automates running the `nmapAutomator.sh` tool and then uses Google's Generative AI to analyze the scan results, providing you with actionable insights and suggested next steps for your penetration test.
 
-![Python](https://img.shields.io/badge/python-v3.8+-blue.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
-![Platform](https://img.shields.io/badge/platform-linux%20%7C%20windows%20%7C%20macos-lightgrey.svg)
-![AI Powered](https://img.shields.io/badge/AI-Powered-ff6b6b.svg)
+## Features
 
-**An intelligent network reconnaissance tool that combines the power of nmapAutomator with AI-driven vulnerability analysis**
+-   **Automated Scans**: Runs the comprehensive `nmapAutomator.sh` "All" scan on a target.
+-   **AI-Powered Analysis**: Sends the scan output to the Gemini API to identify key vulnerabilities, services, and misconfigurations.
+-   **Actionable Suggestions**: The AI generates a summary of findings and a ready-to-use Bash or Python script for exploitation or further enumeration.
+-   **Streamlined Workflow**: Saves you time by combining scanning and analysis into a single, efficient process.
 
-[Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Examples](#-examples) • [Contributing](#-contributing)
+## Prerequisites
 
-</div>
+1.  **Python 3**: Make sure you have Python 3 installed.
+2.  **nmapAutomator**: The script will check if `nmapAutomator.sh` is in your PATH and guide you through the installation if it's not.
+3.  **Google AI API Key**: You need an API key from Google AI Studio to use the analysis feature.
 
----
+## Setup
 
-## 🌟 Overview
+1.  **Clone the repository:**
 
-Nmap Automator with AI is a cutting-edge penetration testing tool that automates network reconnaissance using nmapAutomator and enhances the results with AI-powered vulnerability analysis. The tool leverages local Large Language Models (LLMs) to provide intelligent insights, identify potential attack vectors, and generate actionable exploitation scripts.
+    ```bash
+    git clone https://github.com/your-username/PentestAI.git
+    cd PentestAI
+    ```
 
-### 🎯 Key Benefits
+2.  **Install Python dependencies:**
 
-- **🤖 AI-Powered Analysis**: Leverages local LLMs for intelligent vulnerability assessment
-- **🔍 Comprehensive Scanning**: Automated nmap scanning with nmapAutomator integration
-- **📊 Smart Reporting**: Generates actionable insights and exploitation scripts
-- **🔒 Privacy-First**: Runs completely offline with local AI models
-- **⚡ Streamlined Workflow**: One command from reconnaissance to exploitation planning
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-## 🚀 Features
+3.  **Set up your Google AI API Key:**
 
-### Core Functionality
-- **Automated Network Scanning**: Seamless integration with nmapAutomator for comprehensive target analysis
-- **AI Vulnerability Analysis**: Local LLM processing for identifying security weaknesses
-- **Intelligent Script Generation**: Auto-generates bash/python scripts for next-phase exploitation
-- **Colorized Output**: Enhanced terminal experience with clear, color-coded results
-- **Streaming Response**: Real-time AI analysis output for immediate insights
+    You need to set your API key as an environment variable. This is a secure way to handle your key without hardcoding it into the script.
 
-### Technical Features
-- **Multi-threading Support**: Configurable CPU thread utilization
-- **GPU Acceleration**: Optional GPU offloading for faster AI processing
-- **Timeout Protection**: Built-in safeguards against long-running operations
-- **Error Handling**: Comprehensive error management and user guidance
-- **Context-Aware Processing**: Smart truncation to fit LLM context windows
+    -   **For Linux/macOS:**
 
-## 📋 Prerequisites
+        ```bash
+        export GOOGLE_API_KEY='YOUR_API_KEY'
+        ```
 
-### System Requirements
-- **Python**: 3.8 or higher
-- **Operating System**: Linux, macOS, or Windows
-- **Memory**: Minimum 8GB RAM (16GB recommended for larger models)
-- **Storage**: 2-10GB free space (depending on model size)
+        To make this permanent, add the line to your `~/.bashrc`, `~/.zshrc`, or shell configuration file.
 
-### Dependencies
-- **nmapAutomator**: Network scanning automation
-- **nmap**: Network discovery and security auditing
-- **Local LLM Model**: GGUF format model (e.g., from Hugging Face)
+    -   **For Windows:**
 
-## 🛠️ Installation
+        ```powershell
+        $Env:GOOGLE_API_KEY='YOUR_API_KEY'
+        ```
 
-### 1. Clone the Repository
-```bash
-git clone https://github.com/yourusername/nmap_automator_with_AI.git
-cd nmap_automator_with_AI
-```
+        To set it permanently, use the System Properties menu.
 
-### 2. Install Python Dependencies
-```bash
-# Install required packages
-pip install -r requirements.txt
+## Usage
 
-# Or install manually
-pip install ctransformers transformers colorama
-```
-
-### 3. Install nmapAutomator
-The script will guide you through the installation if nmapAutomator is not found:
+Run the script with the IP address of your target machine:
 
 ```bash
-# Download nmapAutomator
-wget https://raw.githubusercontent.com/21y4d/nmapAutomator/master/nmapAutomator.sh -O ~/nmapAutomator.sh
-
-# Make executable
-chmod +x ~/nmapAutomator.sh
-
-# Move to system PATH (requires sudo)
-sudo mv ~/nmapAutomator.sh /usr/local/bin/nmapAutomator.sh
+python automate_nmap.py <TARGET_IP>
 ```
 
-### 4. Download AI Model
-Download a compatible GGUF model (recommended: PentestAI models):
+**Example:**
 
 ```bash
-# Example: Download a lightweight model
-wget https://huggingface.co/ArmurAI/Pentest_AI/resolve/main/model.gguf
+python automate_nmap.py 10.10.11.123
 ```
 
-## 🎮 Usage
+The script will:
 
-### Basic Usage
-```bash
-python automate_nmap.py <TARGET_IP> --model-path /path/to/your/model.gguf
-```
+1.  Verify that `nmapAutomator.sh` is installed.
+2.  Run the scan against the target IP.
+3.  Print the raw `nmapAutomator` output.
+4.  Send the output to the Gemini API for analysis.
+5.  Stream and display the AI-generated report and suggested script.
 
-### Advanced Options
-```bash
-python automate_nmap.py <TARGET_IP> \
-    --model-path /path/to/model.gguf \
-    --gpu-layers 32 \
-    --threads 8
-```
+## How It Works
 
-### Command Line Arguments
+The script leverages the `google-generativeai` library to communicate with the Gemini API. It constructs a detailed prompt that includes the `nmapAutomator` output and a persona for the AI, instructing it to act as a pentesting expert. The model's response is then streamed to your console in real-time.
 
-| Argument | Description | Default | Required |
-|----------|-------------|---------|----------|
-| `ip_address` | Target IP address for scanning | - | ✅ |
-| `--model-path` | Path to GGUF model file | - | ✅ |
-| `--gpu-layers` | Number of layers to offload to GPU | 50 | ❌ |
-| `--threads` | CPU threads for inference | CPU count | ❌ |
+## License
 
-## 📖 Examples
-
-### Example 1: Basic Scan
-```bash
-python automate_nmap.py 192.168.1.100 --model-path ./models/pentest-ai.gguf
-```
-
-### Example 2: GPU-Accelerated Analysis
-```bash
-python automate_nmap.py 10.0.0.50 \
-    --model-path ./models/large-model.gguf \
-    --gpu-layers 40 \
-    --threads 16
-```
-
-### Example 3: CPU-Only Processing
-```bash
-python automate_nmap.py 172.16.1.10 \
-    --model-path ./models/cpu-optimized.gguf \
-    --gpu-layers 0 \
-    --threads 4
-```
-
-## 📊 Sample Output
-
-```
-INFO: Loading model and tokenizer... This may take a moment.
-SUCCESS: Model and tokenizer loaded.
-INFO: Running command: nmapAutomator.sh 192.168.1.100 All
-SUCCESS: nmapAutomator scan completed.
-
---- PENTESTAI ANALYSIS ---
-
-🎯 CRITICAL FINDINGS:
-1. SSH service (port 22) - Potential for brute force attacks
-2. HTTP service (port 80) - Web application enumeration required
-3. SMB service (port 445) - Anonymous access possible
-
-🔧 RECOMMENDED EXPLOITATION SCRIPT:
-#!/bin/bash
-# Generated exploitation script
-hydra -L users.txt -P passwords.txt ssh://192.168.1.100
-gobuster dir -u http://192.168.1.100 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
-smbclient -L 192.168.1.100 -N
-
---- ANALYSIS COMPLETE ---
-```
-
-## 🔧 Configuration
-
-### Model Selection
-Choose models based on your hardware capabilities:
-
-- **Lightweight (2-4GB)**: Fast processing, basic analysis
-- **Medium (4-8GB)**: Balanced performance and accuracy
-- **Large (8GB+)**: Comprehensive analysis, detailed insights
-
-### Performance Tuning
-- **GPU Layers**: Increase for faster processing (if GPU available)
-- **Threads**: Set to your CPU core count for optimal performance
-- **Context Length**: Adjust based on scan output size
-
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
-
-### Development Setup
-```bash
-# Clone and setup development environment
-git clone https://github.com/yourusername/nmap_automator_with_AI.git
-cd nmap_automator_with_AI
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-### Areas for Contribution
-- 🐛 Bug fixes and improvements
-- 🚀 New AI model integrations
-- 📚 Documentation enhancements
-- 🎨 UI/UX improvements
-- 🧪 Test coverage expansion
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## ⚠️ Disclaimer
-
-**IMPORTANT**: This tool is intended for authorized penetration testing and educational purposes only. Users are responsible for ensuring they have proper authorization before scanning any networks or systems. Unauthorized access to computer systems is illegal and unethical.
-
-## 🆘 Support
-
-- 📖 **Documentation**: Check our [Wiki](https://github.com/yourusername/nmap_automator_with_AI/wiki)
-- 🐛 **Issues**: Report bugs on [GitHub Issues](https://github.com/yourusername/nmap_automator_with_AI/issues)
-- 💬 **Discussions**: Join our [GitHub Discussions](https://github.com/yourusername/nmap_automator_with_AI/discussions)
-
-## 🙏 Acknowledgments
-
-- [nmapAutomator](https://github.com/21y4d/nmapAutomator) - Excellent nmap automation framework
-- [Hugging Face](https://huggingface.co/) - AI model hosting and transformers library
-- [ctransformers](https://github.com/marella/ctransformers) - Efficient local LLM inference
-
----
-
-<div align="center">
-
-**Made with ❤️ for the cybersecurity community**
-
-⭐ Star this repo if you find it useful!
-
-</div>
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.

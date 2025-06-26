@@ -1,19 +1,2 @@
-# Core AI and ML libraries
-ctransformers>=0.2.27
-transformers>=4.35.0
-torch>=2.0.0
-
-# CLI and utility libraries
-colorama>=0.4.6
-argparse
-
-# Development and testing
-pytest>=7.4.0
-black>=23.0.0
-flake8>=6.0.0
-
-# Optional: For additional model formats
-llama-cpp-python>=0.2.20
-
-# System utilities
-psutil>=5.9.0
+python-nmap
+google-generativeai
