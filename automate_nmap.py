@@ -19,7 +19,7 @@ except ImportError:
 # --- Constants ---
 # The maximum number of characters from the nmap output to feed into the model.
 # This prevents exceeding the context window. Adjust as needed.
-MAX_OUTPUT_LENGTH = 3800 
+MAX_OUTPUT_LENGTH = 100000
 ASSISTANT_PERSONA = (
     "You are PentestAI, an expert assistant designed to analyze outputs from the nmapAutomator tool. "
     "Your job is to meticulously extract vulnerabilities, identify running services, flag known CVEs, "
@@ -148,7 +148,7 @@ def main():
     # 1. Get API Key and configure the model
     api_key = get_google_api_key()
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel('gemini-pro')
+    model = genai.GenerativeModel('gemini-2.0-flash')
 
     # 2. Check for dependencies
     check_and_install_nmapAutomator()
@@ -180,3 +180,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

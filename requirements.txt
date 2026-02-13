@@ -1,2 +1,2 @@
-python-nmap
 google-generativeai
+colorama
