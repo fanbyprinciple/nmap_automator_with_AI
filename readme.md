@@ -79,3 +79,5 @@ The script leverages the `google-generativeai` library to communicate with the G
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+I wonder if I can add to it?
